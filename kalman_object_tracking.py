@@ -1,8 +1,9 @@
 import pandas as pd
+
+from histograms_of_observations import *
 from plots import *
 from save_vectors import *
 from tracking_evaluation import *
-from histograms_of_observations import *
 
 X = np.array(pd.read_csv('Data/x.csv'))
 Y = np.array(pd.read_csv('Data/y.csv'))
@@ -85,15 +86,15 @@ for n in range(len(measurements[0])):
     append_states(x, Z, P, R, K)
 
 # # Plots
-# plot_xy(a, b, X, Y, x_pred, y_pred)
-# plot_x(measurements, vx_pred, vy_pred)
+plot_xy(a, b, X, Y, x_pred, y_pred)
+plot_x(measurements, vx_pred, vy_pred)
 plot_k(measurements, Kx, Ky, Kvx, Kvy)
 plot_p(measurements, Px, Py, Pvx, Pvy)
 
 # # Metrics
-# absolute_error(x_pred, X, y_pred, Y, show_plot=False)
-# absolute_error(a, X, b, Y, show_plot=False)
+absolute_error(x_pred, X, y_pred, Y, show_plot=False)
+absolute_error(a, X, b, Y, show_plot=False)
 
 # # Observation variances
-# obs_analysis(a, X)
+obs_analysis(a, X)
 # obs_analysis(b, Y)
