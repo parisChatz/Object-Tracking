@@ -1,18 +1,16 @@
-import numpy as np
 import pandas as pd
-from sklearn.metrics import mean_absolute_error
 from plots import *
 from save_vectors import *
 from tracking_evaluation import *
 from histograms_of_observations import *
 
-X = np.array(pd.read_csv('x.csv'))
-Y = np.array(pd.read_csv('y.csv'))
+X = np.array(pd.read_csv('Data/x.csv'))
+Y = np.array(pd.read_csv('Data/y.csv'))
 X = np.reshape(X, [len(X), ])
 Y = np.reshape(Y, [len(Y), ])
 
-a = np.array(pd.read_csv('a.csv'))
-b = np.array(pd.read_csv('b.csv'))
+a = np.array(pd.read_csv('Data/a.csv'))
+b = np.array(pd.read_csv('Data/b.csv'))
 a = np.reshape(a, [len(a), ])
 b = np.reshape(b, [len(a), ])
 measurements = np.stack((a, b), axis=0)
@@ -47,7 +45,6 @@ var_u, var_v = 0.3, 0.3
 R = np.array([[var_u, 0.0],
               [0.0, var_v]])
 
-
 # Plot covariance Matrix
 # plot_covariances(P, R)
 
@@ -73,28 +70,30 @@ for n in range(len(measurements[0])):
 
     gate = np.dot(np.dot(np.transpose(Z_pred), np.linalg.inv(S)), Z_pred)
 
-    # gate_arr.append(gate)
-    # if gate > 9.21:
-    #     print('!!!!!!!!Observation outside validation gate!!!!!!!!', n)
-    #     x = x
-    #     P = P
-    # else:
-    x = x + np.dot(K, Z_pred)
-    # Update the error covariance
-    P = P - np.dot(np.dot(K, S),np.transpose(K))
+    gate_arr.append(gate)
+    if gate > 9.21:
+        print('Observation outside validation gate!', n)
+        x = x
+        P = P
+    else:
+        # Update the states
+        x = x + np.dot(K, Z_pred)
+        # Update the error covariance
+        P = P - np.dot(np.dot(K, S), np.transpose(K))
 
-    # # Save states (for Plotting)
+    # Save states (for Plotting)
     append_states(x, Z, P, R, K)
-    # print(x.shape, Z.shape, P.shape, R.shape, K.shape)
 
+# # Plots
 # plot_xy(a, b, X, Y, x_pred, y_pred)
 # plot_x(measurements, vx_pred, vy_pred)
-# plot_k(measurements, Kx, Ky, Kvx, Kvy)
-# plot_p(measurements, Px, Py, Pvx, Pvy)
-#
+plot_k(measurements, Kx, Ky, Kvx, Kvy)
+plot_p(measurements, Px, Py, Pvx, Pvy)
+
+# # Metrics
 # absolute_error(x_pred, X, y_pred, Y, show_plot=False)
 # absolute_error(a, X, b, Y, show_plot=False)
 
-# We chose these variances from here
-obs_analysis(a, X)
-obs_analysis(b, Y)
+# # Observation variances
+# obs_analysis(a, X)
+# obs_analysis(b, Y)
