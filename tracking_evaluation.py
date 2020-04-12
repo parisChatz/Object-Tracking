@@ -1,8 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import norm
+import numpy as np
 import seaborn as sns
-from sklearn.metrics import mean_squared_error
 
 
 def absolute_error(pred_value, real_value, pred_value2, real_value2, show_plot=False):
@@ -15,4 +13,8 @@ def absolute_error(pred_value, real_value, pred_value2, real_value2, show_plot=F
         plt.show()
 
     rms = np.sqrt(np.mean(np.sqrt(error)))
-    print(rms)
+    print("rms: ",rms)
+    mean_a = np.mean(error)
+    std_a = np.std(error)
+    print("mean: ", mean_a, "std: ", std_a)
+    print("~"*10)

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+from scipy.stats import norm
 
 
 def plot_covariances(p_init, r):
@@ -79,12 +79,12 @@ def plot_x(measurements, dxt, dyt):
     plt.plot(range(len(measurements[0])), dxt, label='$\dot x$')
     plt.plot(range(len(measurements[0])), dyt, label='$\dot y$')
 
-    plt.axhline(5, color='#999999', label='$\dot x_{real}$')
-    plt.axhline(5, color='#999999', label='$\dot y_{real}$')
+    # plt.axhline(5, color='#999999', label='$\dot x_{real}$')
+    # plt.axhline(5, color='#999999', label='$\dot y_{real}$')
 
     plt.xlabel('Filter Step')
     plt.title('Estimate (Elements from State Vector $x$)')
     plt.legend(loc='best', prop={'size': 22})
-    plt.ylim([0, 30])
+    plt.ylim([0, 15])
     plt.ylabel('Velocity')
     plt.show()

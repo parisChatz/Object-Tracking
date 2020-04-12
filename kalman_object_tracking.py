@@ -16,8 +16,9 @@ a = np.reshape(a, [len(a), ])
 b = np.reshape(b, [len(a), ])
 measurements = np.stack((a, b), axis=0)
 gate_arr = []
+
 # Initial state initialisation
-# state_vector = [xk, vxk, yk, vyk]
+# state_vector = [x, vx, y, vy]
 x = np.transpose(np.array([[0.0, 0.0, 0.0, 0.0]]))
 
 # P_init = Q
@@ -64,16 +65,20 @@ for n in range(len(measurements[0])):
     S = np.dot(np.dot(H, P), np.transpose(H)) + R
     K = np.dot(np.dot(P, np.transpose(H)), np.linalg.inv(S))
 
-    # Update the estimate via z
-    Z = measurements[:, n].reshape(2, 1)
+    # Testing filtering with no measurments for steps 40 to 60.
+    if 40 < n < 60 and False:
+        Z = np.array([0, 0]).reshape(2, 1)
+    else:
+        # Update the estimate via z
+        Z = measurements[:, n].reshape(2, 1)
 
     Z_pred = Z - np.dot(H, x)
 
     gate = np.dot(np.dot(np.transpose(Z_pred), np.linalg.inv(S)), Z_pred)
 
     gate_arr.append(gate)
-    if gate > 9.21:
-        print('Observation outside validation gate!', n)
+    if gate > 9.21 and True:
+        print('Observation outside validation gate!', n - 1)
         x = x
         P = P
     else:
@@ -85,16 +90,15 @@ for n in range(len(measurements[0])):
     # Save states (for Plotting)
     append_states(x, Z, P, R, K)
 
-# # Plots
+# Plots
 plot_xy(a, b, X, Y, x_pred, y_pred)
 plot_x(measurements, vx_pred, vy_pred)
 plot_k(measurements, Kx, Ky, Kvx, Kvy)
 plot_p(measurements, Px, Py, Pvx, Pvy)
 
-# # Metrics
+# Metrics
 absolute_error(x_pred, X, y_pred, Y, show_plot=False)
 absolute_error(a, X, b, Y, show_plot=False)
 
-# # Observation variances
+# Observation variances
 obs_analysis(a, X)
-# obs_analysis(b, Y)
